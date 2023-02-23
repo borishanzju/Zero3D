@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Zero3D: Semantic-Driven 3D Shape Generation For Zero-Shot Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,500,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+
+    <meta property="og:site_name" content="Zero3D: Semantic-Driven 3D Shape Generation For Zero-Shot Learning" />
+    <meta property="og:type" content="video.other" />
+    <meta property="og:title" content="Zero3D: Semantic-Driven 3D Shape Generation For Zero-Shot Learning" />
+    <meta property="og:description" content="Zero3D: Semantic-Driven 3D Shape Generation For Zero-Shot Learning, 2022." />
+    <meta property="og:url" content="https://dance2midi.github.io/" />
+
+    <meta property="article:publisher" content="https://dance2midi.github.io/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Zero3D: Semantic-Driven 3D Shape Generation For Zero-Shot Learning" />
+    <meta name="twitter:url" content="https://dance2midi.github.io/" />
+
+    <script type="module" src="https://unpkg.com/@google/model-viewer@2.0.1/dist/model-viewer.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.js?features=IntersectionObserver"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/js/webflow.fd002feec.js"></script>
+    <script src="./assets/scripts/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sticksy/dist/sticksy.min.js"></script>
+</head>
+
+<body class="noscroll">
+    <div id="set-height">
+        <div class="js-sticky-widget">
+            <canvas id="v0"></canvas>
+        </div>
+    </div>
+    <div id="mouse_div">
+        <div class="mouse_scroll">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <div>
+                <span class="m_scroll_arrows unu"></span>
+                <span class="m_scroll_arrows doi"></span>
+                <span class="m_scroll_arrows trei"></span>
+            </div>
+        </div>
+    </div>
+    <script>
+        const html = document.getElementById("set-height");
+        const canvas = document.getElementById("v0");
+        let context = canvas.getContext("2d");
+        const frameCount = 0;
+        let frame_narrow = ""
+
+        function update_narrow() {
+            let w = window.innerWidth;
+            if (w >= 1300) {
+                frame_narrow = "";
+                canvas.width = 2000;
+                canvas.height = 1000;
+                context = canvas.getContext("2d")
+            } else if (w >= 1000) {
+                frame_narrow = "_midrange";
+                canvas.width = 2000;
+                canvas.height = 2000;
+                context = canvas.getContext("2d")
+            } else {
+                frame_narrow = "_narrow";
+                canvas.width = 1000;
+                canvas.height = 2000;
+                context = canvas.getContext("2d")
+            }
+            Sticksy.hardRefreshAll();
+        }
+
+        function drawToCanvas() {
+            const scrollTop = window.pageYOffset; //html.scrollTop;
+            const maxScrollTop = html.scrollHeight; // - window.innerHeight;
+            const scrollFraction = scrollTop / maxScrollTop;
+            const frameIndex = Math.min(
+                frameCount - 1,
+                Math.ceil(scrollFraction * frameCount)
+            );
+
+            const mousefade = 1 - Math.min((scrollFraction / 0.02), 1);
+            document.getElementById("mouse_div").style.opacity = mousefade;
+
+            requestAnimationFrame(() => updateImage(frameIndex + 1))
+        }
+
+        window.addEventListener('resize', function(event) {
+            update_narrow();
+            drawToCanvas();
+        });
+        const currentFrame = index => (
+            `./assets/media/frames${frame_narrow}/${(60 + 2 * (index - 1)).toString().padStart(4, '0')}.jpg`
+        )
+
+        const preloadImages = () => {
+            for (let i = 1; i < frameCount; i++) {
+                const img = new Image();
+                img.src = currentFrame(i);
+            }
+        };
+
+        let setHeight = document.getElementById("set-height");
+        setHeight.style.height = frameCount * 200 + "px";
+
+        const img = new Image()
+        img.src = currentFrame(1);
+        update_narrow();
+        img.onload = function() {
+            context.drawImage(img, 0, 0);
+        }
+
+        const updateImage = index => {
+            img.src = currentFrame(index);
+            context.drawImage(img, 0, 0);
+        }
+
+        window.addEventListener('scroll', () => {
+            drawToCanvas();
+        });
+
+        preloadImages()
+        var stickyElements = Sticksy.initializeAll('.js-sticky-widget')
+    </script>
+
+    <div class="button-bar text-light" style="padding-bottom: 10px; background-color: rgb(35, 35, 35);">
+        <div class="container" style="max-width: 768px;">
+            <h1 class="text-center"><b>Zero3D:</b> Semantic-Driven 3D Shape Generation For Zero-Shot Learning</h1>
+        </div>
+        <div class="container" style="max-width: 768px; padding-bottom: 50px;">
+            <div class="row authors">
+                <div class="col">
+                    <h5 class="text-center">Bo Han</h5>
+                    <h6 style="margin-top: 10px;" class="text-center">Zhejiang University</h6>
+                </div>
+                <div class="col">
+                    <h5 class="text-center">Yitong Fu</h5>
+                    <h6 style="margin-top: 10px;" class="text-center">Zhejiang University</h6>
+                </div>
+                <div class="col">
+                    <h5 class="text-center">Yixuan Shen</h5>
+                    <h6 style="margin-top: 10px;" class="text-center">National University of Singapore</h6>
+                </div>
+            </div>
+        </div>
+        <div class="buttons" style="margin-bottom: 8px;">
+
+            <a class="btn text-light" role="button" href="https://arxiv.org/abs/2301.13591">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <path fill="white" d="M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z"></path>
+                </svg>Paper
+            </a>
+
+            <a class="btn text-light" role="button" >
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <path fill="white" d="M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z"></path>
+                </svg>Code
+            </a>
+
+            <a class="btn text-light" role="button" href="https://drive.google.com/drive/folders/1ZBeUciZWEZbLTwDz8keCRQI0Kw0BVgid?usp=share_link">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <path fill="white" d="M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z"></path>
+                </svg>Dataset
+            </a>
+        </div>
+        
+
+
+
+    </div>
+    <div style="background-color: rgb(0, 0, 0);">
+        <div class="container text-light" style="max-width: 768px; padding-top: 30px; padding-bottom: 30px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        <!-- <strong> -->
+                            Semantic-driven 3D shape generation aims to generate
+                            3D shapes conditioned on text. Previous works face prob-
+                            lems with single-category generation, low-frequency details,
+                            and requiring a large number of paired data. To tackle these
+                            challenges, we propose a multi-category diffusion model.
+                            Specifically, 1) to alleviate the problem of lack of large-scale
+                            paired data, we establish a bridge between text, 2D image,
+                            and 3D shape through the pre-trained CLIP model, thus real-
+                            izing zero-shot learning. 2) to obtain the 3D shape feature, we
+                            apply the conditional flow model to generate the shape vector
+                            conditioned on CLIP embedding. 3) to generate the multi-
+                            category 3D shape, we employ the hidden-layer diffusion
+                            model conditioned on the multi-category shape vector, which
+                            greatly reduces the training time and memory consumption.
+                            We evaluate the generated results of our framework and
+                            demonstrate that our method outperforms existing methods.
+                        <!-- </strong> -->
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Big grid -->
+    <div style="background-color: rgb(0, 0, 0);">
+        <!--insert image-->
+        <div class="img-container">
+            <div class="img-row" align="center">  
+                <img class="specialvideo img-fluid" src="./assets/resources/airplane.png" alt="teaser" style="width: 30%; height: auto;" >
+
+                <img class="specialvideo img-fluid" src="./assets/resources/boeing_747.png" alt="teaser" style="width: 30%; height: auto;">
+
+                <img class="specialvideo img-fluid" src="./assets/resources/fighter_plane.png" alt="teaser" style="width: 30%; height: auto;">
+            </div>
+        </div>
+
+        <div class="img-container">
+            <div class="img-row" align="center">  
+                <img class="specialvideo img-fluid" src="./assets/resources/triangular_plane.png" alt="teaser" style="width: 30%; height: auto;" >
+
+                <img class="specialvideo img-fluid" src="./assets/resources/car.png" alt="teaser" style="width: 30%; height: auto;">
+
+                <img class="specialvideo img-fluid" src="./assets/resources/chair.png" alt="teaser" style="width: 30%; height: auto;">
+            </div>
+        </div>
+
+        <div class="img-container">
+            <div class="img-row" align="center">  
+                <img class="specialvideo img-fluid" src="./assets/resources/display.png" alt="teaser" style="width: 30%; height: auto;" >
+
+                <img class="specialvideo img-fluid" src="./assets/resources/lamp.png" alt="teaser" style="width: 30%; height: auto;">
+
+                <img class="specialvideo img-fluid" src="./assets/resources/rectangular_table.png" alt="teaser" style="width: 30%; height: auto;">
+            </div>
+        </div>
+
+        <div class="img-container">
+            <div class="img-row" align="center">  
+                <img class="specialvideo img-fluid" src="./assets/resources/round_chair.png" alt="teaser" style="width: 30%; height: auto;" >
+
+                <img class="specialvideo img-fluid" src="./assets/resources/sofa_chair.png" alt="teaser" style="width: 30%; height: auto;">
+
+                <img class="specialvideo img-fluid" src="./assets/resources/square_chair.png" alt="teaser" style="width: 30%; height: auto;">
+            </div>
+        </div>
+
+        <div class="img-container">
+            <div class="img-row" align="center">  
+                <img class="specialvideo img-fluid" src="./assets/resources/square_table.png" alt="teaser" style="width: 30%; height: auto;" >
+
+                <img class="specialvideo img-fluid" src="./assets/resources/table.png" alt="teaser" style="width: 30%; height: auto;">
+
+                <img class="specialvideo img-fluid" src="./assets/resources/thin_table.png" alt="teaser" style="width: 30%; height: auto;">
+            </div>
+        </div>
+            
+    </div>
+
+    <!-- <div style="background-color: rgb(255, 255, 255);">
+        <div class="container" style="max-width: 768px; padding-top: 30px; padding-bottom: 30px; ">
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="./assets/media/method_diagram.png" class="img-fluid" alt="Responsive image">
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+
+    <div style="background-color: rgb(70, 70, 70);">
+        <div class="container text-light" style="max-width: 768px; padding: 30px 0px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>This website draws heavy design inspiration from the excellent <a href="https://edge-dance.github.io//">EDGE</a> site.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
